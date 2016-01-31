@@ -1,0 +1,5 @@
+cron:
+- description: Check bluesnews.com for new youtube.com links
+  url: /
+  schedule: every 60 mins
+ 
