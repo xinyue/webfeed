@@ -1,1 +1,1 @@
-GAE app that watches bluesnews.com, sends me youtube.com videos
+GAE app that watches urls for new links, and sends them to me.
