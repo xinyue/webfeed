@@ -1,2 +1,2 @@
 cd ../google_appengine
-./appcfg.py --noauth_local_webserver -A bn-yt-watcher update ../bn-yt-watcher/
+./appcfg.py --noauth_local_webserver -A webfeed update ../webfeed/
