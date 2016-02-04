@@ -1,5 +1,8 @@
 cron:
-- description: Check bluesnews.com for new youtube.com links
-  url: /
-  schedule: every 60 mins
+- description: Check Bluesnews for new videos
+  url: /bluesnews
+  schedule: every 5 mins
  
+- description: Check PirateBay for new torrents
+  url: /pirate_bay
+  schedule: every 5 mins
