@@ -1,2 +1,2 @@
 cd ../google_appengine
-./appcfg.py --noauth_local_webserver -A webfeed update ../webfeed/
+./appcfg.py --noauth_local_webserver -A mtrencseni-webfeed update ../webfeed/
