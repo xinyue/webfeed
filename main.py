@@ -60,23 +60,32 @@ class Piratebay(webapp2.RequestHandler):
              to_prefix='https://thepiratebay.se/torrent',
              from_email='PirateBay Watcher <mtrencseni@gmail.com>',
              to_email='Marton Trencseni <mtrencseni@gmail.com>',
-             subject_prefix='pirate_bay')
+             subject_prefix='piratebay')
 
 class Hackernews(webapp2.RequestHandler):
     def get(self):
+        self.response.headers['Content-Type'] = 'text/plain'
         top_post_ids = get_json('https://hacker-news.firebaseio.com/v0/topstories.json')
         for i in xrange(30):
             post_id = top_post_ids[i]
             post = get_hn_post(post_id)
+            self.response.write('%s - %s\n' % (post['title'], post['score']))
             if int(post['score']) >= 30:
+                self.response.write('+ qualifies\n')
                 if len(Link.query(Link.url == post['url']).fetch(1)) == 0:
+                    self.response.write('+ not seen, emailing\n')
                     hn_url = 'https://news.ycombinator.com/item?id=%s' % post['id']
-                    subject = "[hacker_news] %s" % post['title']
+                    subject = "[hackernews] %s" % post['title']
                     body = '%s\n\n%s' % (hn_url, post['url'])
                     from_email = 'Hacker News Watcher <mtrencseni@gmail.com>'
                     to_email = 'Marton Trencseni <mtrencseni@gmail.com>'
                     mail.send_mail(from_email, to_email, subject, body)
                     Link(url=post['url']).put()
+                    self.response.write('+ saved\n')
+                else:
+                    self.response.write('- already seen\n')
+            else:
+                self.response.write('- does not qualify\n')
 
 app = webapp2.WSGIApplication([
     ('/bluesnews', Bluesnews),
