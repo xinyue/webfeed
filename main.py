@@ -68,7 +68,7 @@ class Hackernews(webapp2.RequestHandler):
         for i in xrange(30):
             post_id = top_post_ids[i]
             post = get_hn_post(post_id)
-            if post['score'] >= 30:
+            if int(post['score']) >= 30:
                 if len(Link.query(Link.url == post['url']).fetch(1)) == 0:
                     hn_url = 'https://news.ycombinator.com/item?id=%s' % post['id']
                     subject = "[hacker_news] %s" % post['title']
