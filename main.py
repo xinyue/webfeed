@@ -70,7 +70,7 @@ class Hackernews(webapp2.RequestHandler):
             post_id = top_post_ids[i]
             post = get_hn_post(post_id)
             self.response.write('%s - %s\n' % (post['title'], post['score']))
-            if int(post['score']) >= 30:
+            if int(post['score']) >= 60:
                 self.response.write('+ qualifies\n')
                 if len(Link.query(Link.url == post['url']).fetch(1)) == 0:
                     self.response.write('+ not seen, emailing\n')
