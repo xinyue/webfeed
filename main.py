@@ -9,8 +9,8 @@ from google.appengine.api import urlfetch
 class Link(ndb.Model):
     url = ndb.StringProperty(indexed=True)
 
-def get_urls(html, to_prefix):
-    urls = html.xpath('//a/@href')
+def get_urls(html, to_prefix, xpath):
+    urls = html.xpath(xpath)
     matching_urls = []
     for url in urls:
         logging.debug('URL: %s' % url)
@@ -36,9 +36,9 @@ def get_hn_post(post_id):
     url = 'https://hacker-news.firebaseio.com/v0/item/%s.json' % post_id
     return get_json(url)
 
-def main(from_url, to_prefix, replace_with, attach_url_prefix, from_email, to_email, subject_prefix):
+def main(from_url, xpath, to_prefix, replace_with, attach_url_prefix, from_email, to_email, subject_prefix):
     logging.getLogger().setLevel(logging.DEBUG)
-    urls = get_urls(get_html(from_url), to_prefix)
+    urls = get_urls(get_html(from_url), to_prefix, xpath)
     for url in urls:
         if len(Link.query(Link.url == url).fetch(1)) == 0:
             html = get_html(url)
@@ -61,6 +61,7 @@ def main(from_url, to_prefix, replace_with, attach_url_prefix, from_email, to_em
 class Bluesnews(webapp2.RequestHandler):
     def get(self):
         main(from_url='http://bluesnews.com',
+             xpath='//a/@href',
              to_prefix='https://www.youtube.com',
              replace_with=None,
              attach_url_prefix=None,
@@ -71,12 +72,24 @@ class Bluesnews(webapp2.RequestHandler):
 class Piratebay(webapp2.RequestHandler):
     def get(self):
         main(from_url='https://thepiratebay.se/top/207',
+             xpath='//a/@href',
              to_prefix='https://thepiratebay.se/torrent',
              replace_with='https://pirateproxy.tv/torrent',
              attach_url_prefix='http://www.imdb.com',
              from_email='PirateBay Watcher <mtrencseni@gmail.com>',
              to_email='Marton Trencseni <mtrencseni@gmail.com>',
              subject_prefix='piratebay')
+
+class Redlettermedia(webapp2.RequestHandler):
+    def get(self):
+        main(from_url='http://redlettermedia.com',
+             xpath='//iframe/@src',
+             to_prefix='https://www.youtube.com/embed/',
+             replace_with='https://www.youtube.com/watch?v=',
+             attach_url_prefix=None,
+             from_email='RedLetterMedia Watcher <mtrencseni@gmail.com>',
+             to_email='Marton Trencseni <mtrencseni@gmail.com>',
+             subject_prefix='redlettermedia')
 
 class Hackernews(webapp2.RequestHandler):
     def get(self):
@@ -106,5 +119,6 @@ class Hackernews(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     ('/bluesnews', Bluesnews),
     ('/piratebay', Piratebay),
+    ('/redlettermedia', Redlettermedia),
     ('/hackernews', Hackernews),
 ], debug=True)

@@ -1,12 +1,16 @@
 cron:
 - description: Check Bluesnews for new videos
   url: /bluesnews
-  schedule: every 63 mins
+  schedule: every 57 mins
  
 - description: Check Piratebay for new torrents
   url: /piratebay
-  schedule: every 57 mins
+  schedule: every 59 mins
 
-- description: Check Hackernews for new torrents
-  url: /hackernews
+- description: Check Redlettermedia for new videos
+  url: /redlettermedia
   schedule: every 61 mins
+
+- description: Check Hackernews for new articles
+  url: /hackernews
+  schedule: every 63 mins
