@@ -3,9 +3,13 @@ cron:
   url: /bluesnews
   schedule: every 57 mins
  
-- description: Check Piratebay for new torrents
-  url: /piratebay
+- description: Check Piratebay for new movies
+  url: /piratebay_movies
   schedule: every 59 mins
+
+- description: Check Piratebay for new games
+  url: /piratebay_games
+  schedule: every 60 mins
 
 - description: Check Redlettermedia for new videos
   url: /redlettermedia
@@ -14,3 +18,15 @@ cron:
 - description: Check Hackernews for new articles
   url: /hackernews
   schedule: every 63 mins
+
+- description: Check Backreaction for new articles
+  url: /backreaction
+  schedule: every 180 mins
+
+- description: Check SimplyStatistics for new articles
+  url: /simplystatistics
+  schedule: every 181 mins
+
+- description: Check EvanMiller for new articles
+  url: /evanmiller
+  schedule: every 182 mins
