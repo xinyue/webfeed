@@ -182,7 +182,7 @@ class Hackernews(webapp2.RequestHandler):
                     hn_url = 'https://news.ycombinator.com/item?id=%s' % post['id']
                     subject = "[hackernews] %s" % post['title']
                     body = '%s\n\n%s' % (hn_url, post['url'])
-                    from_email='Webfeed <mtrencseni@gmail.com>',
+                    from_email='Webfeed <mtrencseni@gmail.com>'
                     to_email = 'Marton Trencseni <mtrencseni@gmail.com>'
                     mail.send_mail(from_email, to_email, subject, body)
                     Link(url=post['url']).put()
