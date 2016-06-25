@@ -123,6 +123,17 @@ class Evanmiller(webapp2.RequestHandler):
              to_email='Marton Trencseni <mtrencseni@gmail.com>',
              subject_prefix='evanmiller')
 
+class Datatau(webapp2.RequestHandler):
+    def get(self):
+        main(from_url='http://datatau.com',
+             xpath='//td[@class="title"]/a/@href',
+             to_prefix='',
+             replace_with=None,
+             attach_url_prefix=None,
+             from_email='Webfeed <mtrencseni@gmail.com>',
+             to_email='Marton Trencseni <mtrencseni@gmail.com>',
+             subject_prefix='datatau')
+
 class Bluesnews(webapp2.RequestHandler):
     def get(self):
         main(from_url='http://bluesnews.com',
@@ -175,7 +186,7 @@ class Hackernews(webapp2.RequestHandler):
             post_id = top_post_ids[i]
             post = get_hn_post(post_id)
             self.response.write('%s - %s\n' % (post['title'], post['score']))
-            if int(post['score']) >= 60:
+            if int(post['score']) >= 100:
                 self.response.write('+ qualifies\n')
                 if len(Link.query(Link.url == post['url']).fetch(1)) == 0:
                     self.response.write('+ not seen, emailing\n')
@@ -201,4 +212,5 @@ app = webapp2.WSGIApplication([
     ('/piratebay_games', PiratebayGames),
     ('/redlettermedia', Redlettermedia),
     ('/hackernews', Hackernews),
+    ('/datatau', Datatau),
 ], debug=True)

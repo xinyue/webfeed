@@ -19,6 +19,10 @@ cron:
   url: /hackernews
   schedule: every 63 mins
 
+- description: Check Datatau for new articles
+  url: /datatau
+  schedule: every 87 mins
+
 - description: Check Backreaction for new articles
   url: /backreaction
   schedule: every 180 mins
