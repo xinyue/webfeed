@@ -126,7 +126,7 @@ class Evanmiller(webapp2.RequestHandler):
 class Datatau(webapp2.RequestHandler):
     def get(self):
         main(from_url='http://datatau.com',
-             xpath='//td[@class="title"]/a/@href',
+             xpath='//td[@class="title"]/a[not(contains(@href, "datatau.com"))]/@href',
              to_prefix='',
              replace_with=None,
              attach_url_prefix=None,
