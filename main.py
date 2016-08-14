@@ -178,6 +178,61 @@ class Redlettermedia(webapp2.RequestHandler):
              to_email='Marton Trencseni <mtrencseni@gmail.com>',
              subject_prefix='redlettermedia')
 
+class Karpathy(webapp2.RequestHandler):
+    def get(self):
+        main(from_url='http://karpathy.github.io/',
+             xpath='//a[@class="post-link"]/@href',
+             to_prefix='http://karpathy.github.io/',
+             replace_with=None,
+             attach_url_prefix=None,
+             from_email='Webfeed <mtrencseni@gmail.com>',
+             to_email='Marton Trencseni <mtrencseni@gmail.com>',
+             subject_prefix='karpathy')
+
+class MITPressComputerScience(webapp2.RequestHandler):
+    def get(self):
+        main(from_url='https://mitpress.mit.edu/category/discipline/computer-science-and-intelligent-systems',
+             xpath='//a/@href',
+             to_prefix='https://mitpress.mit.edu/books/',
+             replace_with=None,
+             attach_url_prefix=None,
+             from_email='Webfeed <mtrencseni@gmail.com>',
+             to_email='Marton Trencseni <mtrencseni@gmail.com>',
+             subject_prefix='mitpress compsci')
+
+class MITPressMathPhysics(webapp2.RequestHandler):
+    def get(self):
+        main(from_url='https://mitpress.mit.edu/category/discipline/mathematics-and-physics',
+             xpath='//a/@href',
+             to_prefix='https://mitpress.mit.edu/books/',
+             replace_with=None,
+             attach_url_prefix=None,
+             from_email='Webfeed <mtrencseni@gmail.com>',
+             to_email='Marton Trencseni <mtrencseni@gmail.com>',
+             subject_prefix='mitpress mathphys')
+
+class MITPressDesign(webapp2.RequestHandler):
+    def get(self):
+        main(from_url='https://mitpress.mit.edu/category/discipline/design-and-design-theory',
+             xpath='//a/@href',
+             to_prefix='https://mitpress.mit.edu/books/',
+             replace_with=None,
+             attach_url_prefix=None,
+             from_email='Webfeed <mtrencseni@gmail.com>',
+             to_email='Marton Trencseni <mtrencseni@gmail.com>',
+             subject_prefix='mitpress design')
+
+class HBRMostPopular(webapp2.RequestHandler):
+    def get(self):
+        main(from_url='https://hbr.org/most-popular',
+             xpath='//h3/a/@href',
+             to_prefix='https://hbr.org/',
+             replace_with=None,
+             attach_url_prefix=None,
+             from_email='Webfeed <mtrencseni@gmail.com>',
+             to_email='Marton Trencseni <mtrencseni@gmail.com>',
+             subject_prefix='hbr most popular')
+
 class Hackernews(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
@@ -186,7 +241,7 @@ class Hackernews(webapp2.RequestHandler):
             post_id = top_post_ids[i]
             post = get_hn_post(post_id)
             self.response.write('%s - %s\n' % (post['title'], post['score']))
-            if int(post['score']) >= 100:
+            if int(post['score']) >= 90:
                 self.response.write('+ qualifies\n')
                 if len(Link.query(Link.url == post['url']).fetch(1)) == 0:
                     self.response.write('+ not seen, emailing\n')
@@ -213,4 +268,9 @@ app = webapp2.WSGIApplication([
     ('/redlettermedia', Redlettermedia),
     ('/hackernews', Hackernews),
     ('/datatau', Datatau),
+    ('/karpathy', Karpathy),
+    ('/mitpress_compsci', MITPressComputerScience),
+    ('/mitpress_mathphys', MITPressMathPhysics),
+    ('/mitpress_design', MITPressDesign),
+    ('/hbr_most_popular', HBRMostPopular),
 ], debug=True)

@@ -34,3 +34,23 @@ cron:
 - description: Check EvanMiller for new articles
   url: /evanmiller
   schedule: every 182 mins
+
+- description: Check Karpathy for new articles
+  url: /karpathy
+  schedule: every 183 mins
+
+- description: Check MIT Press Comp Sci for new articles
+  url: /mitpress_compsci
+  schedule: every 184 mins
+
+- description: Check MIT Press Math Phys for new articles
+  url: /mitpress_mathphys
+  schedule: every 185 mins
+
+- description: Check MIT Press Design for new articles
+  url: /mitpress_design
+  schedule: every 186 mins
+
+- description: Check HBR Most Popular for new articles
+  url: /hbr_most_popular
+  schedule: every 187 mins
