@@ -4,7 +4,8 @@ import webapp2
 import logging
 import json
 from google.appengine.ext import ndb
-from google.appengine.api import mail
+import sendgrid
+from sendgrid.helpers import mail
 from google.appengine.api import urlfetch
 
 class Link(ndb.Model):
@@ -20,6 +21,9 @@ pirate_bay_proxies = [
     'https://tpb.press'
     ]
 pi = 0
+
+SENDGRID_API_KEY = open('sendgrid_api_key.txt', 'r').read()
+sg = sendgrid.SendGridAPIClient(apikey=SENDGRID_API_KEY)
 
 def url_fetch(url):
     # huge hack
@@ -61,6 +65,18 @@ def get_hn_post(post_id):
     url = 'https://hacker-news.firebaseio.com/v0/item/%s.json' % post_id
     return get_json(url)
 
+def send_mail(from_email, to_email, subject, body):
+    message = mail.Mail(
+        mail.Email(from_email),
+        subject,
+        mail.Email(to_email),
+        mail.Content('text/plain', body)
+    )
+    response = sg.client.mail.send.post(request_body=message.get())
+    if not str(response.status_code).startswith('2'):
+        raise ValueError('sendgrid status_code: %s header: %s body: %s' %
+            (response.status_code(), response.headers(), response.body()))
+
 def main(from_url, xpath, to_prefix, replace_with, attach_url_prefix, from_email, to_email, subject_prefix):
     logging.getLogger().setLevel(logging.DEBUG)
     urls = get_urls(get_html(from_url), to_prefix, xpath)
@@ -84,7 +100,7 @@ def main(from_url, xpath, to_prefix, replace_with, attach_url_prefix, from_email
                     body = url
                 if attach_url is not None:
                     body += "\n\n%s" % attach_url
-                mail.send_mail(from_email, to_email, subject, body)
+                send_mail(from_email, to_email, subject, body)
                 Link(url=url).put()
         except Exception, err:
             logging.debug('Exception while fetching %s' % url)
@@ -250,7 +266,7 @@ class Hackernews(webapp2.RequestHandler):
                     body = '%s\n\n%s' % (hn_url, post['url'])
                     from_email='Webfeed <mtrencseni@gmail.com>'
                     to_email = 'Marton Trencseni <mtrencseni@gmail.com>'
-                    mail.send_mail(from_email, to_email, subject, body)
+                    send_mail(from_email, to_email, subject, body)
                     Link(url=post['url']).put()
                     self.response.write('+ saved\n')
                 else:
