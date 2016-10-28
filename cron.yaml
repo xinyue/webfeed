@@ -54,3 +54,7 @@ cron:
 - description: Check HBR Most Popular for new articles
   url: /hbr_most_popular
   schedule: every 187 mins
+
+- description: Check BetterHumans for new articles
+  url: /betterhumans
+  schedule: every 187 mins

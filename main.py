@@ -249,6 +249,17 @@ class HBRMostPopular(webapp2.RequestHandler):
              to_email='Marton Trencseni <mtrencseni@gmail.com>',
              subject_prefix='hbr most popular')
 
+class BetterHumans(webapp2.RequestHandler):
+    def get(self):
+        main(from_url='https://betterhumans.coach.me/',
+             xpath='//h3/a/@href',
+             to_prefix='https://betterhumans.coach.me/',
+             replace_with=None,
+             attach_url_prefix=None,
+             from_email='Webfeed <mtrencseni@gmail.com>',
+             to_email='Marton Trencseni <mtrencseni@gmail.com>',
+             subject_prefix='betterhumans')
+
 class Hackernews(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
@@ -289,4 +300,5 @@ app = webapp2.WSGIApplication([
     ('/mitpress_mathphys', MITPressMathPhysics),
     ('/mitpress_design', MITPressDesign),
     ('/hbr_most_popular', HBRMostPopular),
+    ('/betterhumans', BetterHumans),
 ], debug=True)
